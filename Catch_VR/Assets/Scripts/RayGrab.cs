@@ -11,15 +11,26 @@ public enum StatePower
 }
 public class RayGrab : MonoBehaviour {
 
+
+    [Header("Oculus Anchor")]
     public GameObject anchorRight;
     public GameObject anchorLeft;
     public GameObject anchorCenter;
 
+    [Header("Raycast Parameter")]
     public float distance;
     public float sphereRadius;
 
-    StatePower sPRight;
-    StatePower sPLeft;
+    [Header("State Of Power")]
+    public StatePower sPRight;
+    public StatePower sPLeft;
+    public GameObject swordLeft;
+    public GameObject swordRight;
+
+    [Header("Force to Apply")]
+    public Rigidbody rBSwordRight;
+    public Rigidbody rBSwordLeft;
+    public float forceMultiplier;
 
     float currentHitDistanceLeft;
     float currentHitDistanceRight;
@@ -64,23 +75,63 @@ public class RayGrab : MonoBehaviour {
         RaycastHit hitLeft;
         RaycastHit hitRight;
 
-
+        //Part for Right controller
         if (OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger) > 0)
         {
-            if (Physics.SphereCast(anchorLeft.transform.position, sphereRadius ,anchorLeft.transform.forward, out hitLeft, distance))
+            if (sPRight == StatePower.Sleep)
+            {
+                if (Physics.SphereCast(anchorRight.transform.position, sphereRadius, anchorRight.transform.forward, out hitRight, distance))
+                {
+                    currentHitDistanceRight = hitRight.distance;
+                    if (hitRight.collider.tag == "Sword")
+                    {
+                        GameObject registeredCol;
+                        registeredCol = hitRight.collider.gameObject;
+                        CheckParent(registeredCol, true);
+                        sPRight = StatePower.Attract;
+                    }
+                }
+            }else if (sPRight == StatePower.Attract)
+            {
+
+            }
+            
+        }
+        if (OVRInput.Get(OVRInput.Axis1D.PrimaryIndexTrigger) > 0)
+        {
+            if (Physics.SphereCast(anchorLeft.transform.position, sphereRadius, anchorLeft.transform.forward, out hitLeft, distance))
             {
                 currentHitDistanceLeft = hitLeft.distance;
             }
         }
-        if (OVRInput.Get(OVRInput.Axis1D.PrimaryIndexTrigger) > 0)
+    }
+
+
+    void CheckParent(GameObject hitObject, bool isRight)
+    {
+        if (hitObject.transform.parent == null)
         {
-            if (Physics.SphereCast(anchorRight.transform.position, sphereRadius, anchorRight.transform.forward, out hitRight, distance))
+            if (isRight)
             {
-                currentHitDistanceRight = hitRight.distance;
+                swordRight = hitObject;
+            }
+            else
+            {
+                swordLeft = hitObject;
+            }
+        }
+        else
+        {
+            if (isRight)
+            {
+                swordRight = hitObject.transform.parent.gameObject;
+            }
+            else
+            {
+                swordLeft = hitObject.transform.parent.gameObject;
             }
         }
     }
-
     private void OnDrawGizmosSelected()
     {
         if (anchorLeft != null)
