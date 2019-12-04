@@ -93,9 +93,26 @@ public class RayGrab : MonoBehaviour {
                 }
             }else if (sPRight == StatePower.Attract)
             {
-
+                Vector3 directionRight = swordRight.transform.position - anchorRight.transform.position;
+                rBSwordRight.AddForceAtPosition(directionRight * forceMultiplier, swordRight.transform.position, ForceMode.Impulse);
             }
-            
+        }
+        else
+        {
+            if (swordRight != null)
+            {
+                if (rBSwordRight != null)
+                {
+                    rBSwordRight = null;
+                    swordRight = null;
+                    sPRight = StatePower.Sleep;
+
+                }
+            }
+            else
+            {
+                sPRight = StatePower.Sleep;
+            }
         }
         if (OVRInput.Get(OVRInput.Axis1D.PrimaryIndexTrigger) > 0)
         {
@@ -114,10 +131,12 @@ public class RayGrab : MonoBehaviour {
             if (isRight)
             {
                 swordRight = hitObject;
+                rBSwordRight = swordRight.GetComponent<Rigidbody>();
             }
             else
             {
                 swordLeft = hitObject;
+                rBSwordLeft = swordLeft.GetComponent<Rigidbody>();
             }
         }
         else
@@ -125,10 +144,13 @@ public class RayGrab : MonoBehaviour {
             if (isRight)
             {
                 swordRight = hitObject.transform.parent.gameObject;
+                rBSwordRight = swordRight.GetComponent<Rigidbody>();
+
             }
             else
             {
                 swordLeft = hitObject.transform.parent.gameObject;
+                rBSwordLeft = swordLeft.GetComponent<Rigidbody>();
             }
         }
     }
