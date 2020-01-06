@@ -142,19 +142,6 @@ MonoBehaviour:
   rBSwordRight: {fileID: 0}
   rBSwordLeft: {fileID: 0}
   forceMultiplier: 2
---- !u!135 &65071195
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 65071189}
-  m_Material: {fileID: 13400000, guid: 8cfd5fd2780d3554aa9d4a7dc4106112, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &170076733
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,7 +307,7 @@ GameObject:
   - component: {fileID: 595251354}
   m_Layer: 0
   m_Name: Cube (1)
-  m_TagString: Untagged
+  m_TagString: Decor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -503,7 +490,7 @@ GameObject:
   - component: {fileID: 948440234}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Decor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -594,7 +581,7 @@ GameObject:
   - component: {fileID: 984806025}
   m_Layer: 0
   m_Name: Cube (2)
-  m_TagString: Untagged
+  m_TagString: Decor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -746,6 +733,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 135882093890582384, guid: f552c5a6cb52c3941b11d243262738de,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f552c5a6cb52c3941b11d243262738de, type: 3}
 --- !u!4 &1446472495 stripped
@@ -774,7 +766,7 @@ GameObject:
   - component: {fileID: 1609699581}
   m_Layer: 0
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: Decor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -863,7 +855,7 @@ GameObject:
   - component: {fileID: 1675954986}
   m_Layer: 0
   m_Name: Decors
-  m_TagString: Untagged
+  m_TagString: Decor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1001,6 +993,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9809c5e8418bb047bf2c8ba1d1a2cec, type: 3}
+--- !u!1 &2000080889 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1824533603737848, guid: f552c5a6cb52c3941b11d243262738de,
+    type: 3}
+  m_PrefabInstance: {fileID: 1329508835}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2000080890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000080889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87d3154b31a29744d8f4ac29cefc3ee4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxSpeed: 20
+  isForced: 0
+  isGrabbed: 0
 --- !u!1 &2060240835
 GameObject:
   m_ObjectHideFlags: 0
@@ -1015,7 +1028,7 @@ GameObject:
   - component: {fileID: 2060240837}
   m_Layer: 0
   m_Name: Cube (3)
-  m_TagString: Untagged
+  m_TagString: Decor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
