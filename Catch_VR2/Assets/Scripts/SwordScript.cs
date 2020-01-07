@@ -13,13 +13,18 @@ public class SwordScript : MonoBehaviour
 
     Rigidbody rb;
 
-
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
     }
     // Start is called before the first frame update
     void Start()
+    {
+        
+    }
+
+
+    private void Update()
     {
         
     }

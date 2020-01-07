@@ -78,7 +78,7 @@ public class RayGrab : MonoBehaviour {
         //Part for Right controller
         if (OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger) > 0)
         {
-            Debug.LogWarning("Merde");
+            Debug.LogWarning("Right hand activate");
             if (sPRight == StatePower.Sleep)
             {
                 if (Physics.SphereCast(anchorRight.transform.position, sphereRadius, anchorRight.transform.forward, out hitRight, distance))
@@ -120,9 +120,45 @@ public class RayGrab : MonoBehaviour {
         }
         if (OVRInput.Get(OVRInput.Axis1D.PrimaryIndexTrigger) > 0)
         {
-            if (Physics.SphereCast(anchorLeft.transform.position, sphereRadius, anchorLeft.transform.forward, out hitLeft, distance))
+            Debug.LogWarning("Left hand activate");
+
+            if (sPLeft == StatePower.Sleep)
             {
-                currentHitDistanceLeft = hitLeft.distance;
+                if (Physics.SphereCast(anchorLeft.transform.position, sphereRadius, anchorLeft.transform.forward, out hitLeft, distance))
+                {
+                    currentHitDistanceLeft = hitLeft.distance;
+                    if (hitLeft.collider.tag == "Sword")
+                    {
+                        GameObject registeredCol;
+                        registeredCol = hitLeft.collider.gameObject;
+                        CheckParent(registeredCol, false);
+                        sPLeft = StatePower.Attract;
+                    }
+                }
+            }
+            else if (sPLeft == StatePower.Attract)
+            {
+                rBSwordLeft.useGravity = false;
+                Vector3 directionLeft = (swordLeft.transform.position - anchorLeft.transform.position );
+                rBSwordLeft.AddForce(directionLeft * forceMultiplier);
+            }
+        }
+        else
+        {
+            if (swordLeft != null)
+            {
+                if (rBSwordLeft != null)
+                {
+                    rBSwordLeft.useGravity = true;
+
+                    rBSwordLeft = null;
+                    swordLeft = null;
+                    sPLeft = StatePower.Sleep;
+                }
+            }
+            else
+            {
+                sPLeft = StatePower.Sleep;
             }
         }
     }
