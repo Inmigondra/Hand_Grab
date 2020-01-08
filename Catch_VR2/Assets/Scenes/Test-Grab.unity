@@ -190,7 +190,7 @@ PrefabInstance:
     - target: {fileID: 54495143186878392, guid: f552c5a6cb52c3941b11d243262738de,
         type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 135882093890582384, guid: f552c5a6cb52c3941b11d243262738de,
         type: 3}
@@ -334,6 +334,7 @@ MonoBehaviour:
   maxSpeed: 30
   isForced: 1
   isGrabbed: 1
+  target: {fileID: 1192111157}
 --- !u!1 &534669902
 GameObject:
   m_ObjectHideFlags: 0
@@ -787,6 +788,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1910431283}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1192111157 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400002, guid: 126d619cf4daa52469682f85c1378b4a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1910431283}
+  m_PrefabAsset: {fileID: 0}
 --- !u!135 &1192111160
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -878,7 +885,7 @@ PrefabInstance:
     - target: {fileID: 54495143186878392, guid: f552c5a6cb52c3941b11d243262738de,
         type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 135882093890582384, guid: f552c5a6cb52c3941b11d243262738de,
         type: 3}
@@ -1176,6 +1183,7 @@ MonoBehaviour:
   maxSpeed: 30
   isForced: 1
   isGrabbed: 1
+  target: {fileID: 1192111157}
 --- !u!1 &2060240835
 GameObject:
   m_ObjectHideFlags: 0

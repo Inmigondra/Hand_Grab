@@ -13,6 +13,8 @@ public class SwordScript : MonoBehaviour
 
     Rigidbody rb;
 
+
+    public Transform target;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -24,9 +26,12 @@ public class SwordScript : MonoBehaviour
     }
 
 
-    private void Update()
+    void Update()
     {
-        
+        /*if (isForced)
+        {
+            transform.LookAt(target);
+        }*/
     }
 
     // Update is called once per frame
