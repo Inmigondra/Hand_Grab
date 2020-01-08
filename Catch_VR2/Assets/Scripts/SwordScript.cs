@@ -15,6 +15,8 @@ public class SwordScript : MonoBehaviour
 
 
     public Transform target;
+    public float forces;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -28,15 +30,29 @@ public class SwordScript : MonoBehaviour
 
     void Update()
     {
-        /*if (isForced)
+        /*Vector3 Truc = new Vector3(0, -0.5f, 0);
+        if (isForced)
         {
-            transform.LookAt(target);
+            transform.LookAt(target.position-Truc);
         }*/
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+
+        if (isForced)
+        {
+            Vector3 targetDelta = target.position - transform.position;
+            float angleDiff = Vector3.Angle(transform.forward, targetDelta);
+
+            Vector3 cross = Vector3.Cross(transform.forward, targetDelta);
+
+            rb.AddTorque(cross * angleDiff * forces);
+
+        }
+
+
         if (rb.velocity.magnitude > maxSpeed)
         {
             rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeed);

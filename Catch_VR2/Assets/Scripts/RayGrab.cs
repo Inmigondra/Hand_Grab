@@ -152,6 +152,7 @@ public class RayGrab : MonoBehaviour {
             else if (sPLeft == StatePower.Attract)
             {
                 rBSwordLeft.useGravity = false;
+                sSLeft.isForced = true;
                 Vector3 directionLeft = (swordLeft.transform.position - anchorLeft.transform.position ) * -1f;
                 rBSwordLeft.AddForce(directionLeft * forceMultiplier);
             }
@@ -167,6 +168,11 @@ public class RayGrab : MonoBehaviour {
                     rBSwordLeft = null;
                     swordLeft = null;
                     sPLeft = StatePower.Sleep;
+                }
+                if (sSLeft != null)
+                {
+                    sSLeft.isForced = false;
+                    sSLeft = null;
                 }
             }
             else
