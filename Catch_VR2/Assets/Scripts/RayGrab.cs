@@ -40,6 +40,9 @@ public class RayGrab : MonoBehaviour {
     float currentHitDistanceRight;
 
 
+    float distanceLeft;
+    float distanceRight;
+
     private void Awake()
     {
         //get the anchor from OVR
@@ -80,7 +83,7 @@ public class RayGrab : MonoBehaviour {
         RaycastHit hitLeft;
         RaycastHit hitRight;
 
-        //Part for Right controller
+        //Part for Right controller to attract
         if (OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger) > 0)
         {
             Debug.LogWarning("Right hand activate");
@@ -130,7 +133,7 @@ public class RayGrab : MonoBehaviour {
             }
         }
 
-        //Part for Left controller
+        //Part for Left controller to attract
         if (OVRInput.Get(OVRInput.Axis1D.PrimaryIndexTrigger) > 0)
         {
             Debug.LogWarning("Left hand activate");
@@ -180,6 +183,17 @@ public class RayGrab : MonoBehaviour {
                 sPLeft = StatePower.Sleep;
             }
         }
+
+        if (swordLeft != null)
+        {
+            distanceLeft = Vector3.Distance(anchorLeft.transform.position, swordLeft.transform.position);
+        }
+
+        if (swordRight != null)
+        {
+            distanceRight = Vector3.Distance(anchorRight.transform.position, swordRight.transform.position);
+        }
+
     }
 
 
@@ -233,5 +247,15 @@ public class RayGrab : MonoBehaviour {
             Gizmos.DrawLine(anchorRight.transform.position, anchorRight.transform.forward * distance);
             Gizmos.DrawWireSphere(anchorRight.transform.position + anchorRight.transform.forward * currentHitDistanceRight, sphereRadius);
         }
+    }
+
+    void GrabObject()
+    {
+
+    }
+
+    void DropObject(GameObject dropped)
+    {
+
     }
 }
