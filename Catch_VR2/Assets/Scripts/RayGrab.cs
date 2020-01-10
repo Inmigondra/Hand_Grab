@@ -7,12 +7,22 @@ public enum StatePower
 {
     Sleep,
     Attract,
-    Equiped
+    Equiped,
+    Throw
+}
+public enum StrenghtVibrate
+{
+    Weak,
+    Medium,
+    Strong
 }
 public class RayGrab : MonoBehaviour {
 
 
     [Header("Oculus Anchor")]
+    public OVRInput.Controller controllerLeft;
+    public OVRInput.Controller controllerRight;
+
     public GameObject anchorRight;
     public GameObject anchorLeft;
     public GameObject anchorCenter;
@@ -114,11 +124,20 @@ public class RayGrab : MonoBehaviour {
             {
                 if (rBSwordRight != null)
                 {
-                    rBSwordRight.useGravity = true;
 
-                    rBSwordRight = null;
-                    swordRight = null;
-                    sPRight = StatePower.Sleep;
+                    if (sPRight == StatePower.Attract)
+                    {
+                        rBSwordRight.useGravity = true;
+                        rBSwordRight = null;
+                        swordRight = null;
+                        sPRight = StatePower.Sleep;
+                    }
+                    if (sPRight == StatePower.Equiped)
+                    {
+                        DropObject(swordRight, true);
+                        sPRight = StatePower.Throw;
+                    }
+                    
 
                 }
                 if (sSRight != null)
@@ -129,6 +148,7 @@ public class RayGrab : MonoBehaviour {
             }
             else
             {
+
                 sPRight = StatePower.Sleep;
             }
         }
@@ -164,13 +184,23 @@ public class RayGrab : MonoBehaviour {
         {
             if (swordLeft != null)
             {
+
+
                 if (rBSwordLeft != null)
                 {
-                    rBSwordLeft.useGravity = true;
-
-                    rBSwordLeft = null;
-                    swordLeft = null;
-                    sPLeft = StatePower.Sleep;
+                    if (sPLeft == StatePower.Attract)
+                    {
+                        rBSwordLeft.useGravity = true;
+                        rBSwordLeft = null;
+                        swordLeft = null;
+                        sPLeft = StatePower.Sleep;
+                    }
+                    if (sPLeft == StatePower.Equiped)
+                    {
+                        DropObject(swordLeft, false);
+                        sPLeft = StatePower.Throw;
+                    }
+                    
                 }
                 if (sSLeft != null)
                 {
@@ -192,6 +222,80 @@ public class RayGrab : MonoBehaviour {
         if (swordRight != null)
         {
             distanceRight = Vector3.Distance(anchorRight.transform.position, swordRight.transform.position);
+        }
+
+        
+        if (OVRInput.Get(OVRInput.Axis1D.SecondaryHandTrigger) > 0)
+        {
+            if (swordRight != null)
+            {
+                if (sPRight == StatePower.Attract)
+                {
+                    if (distanceRight < 0.35f)
+                    {
+                        swordRight.transform.SetParent(anchorRight.transform);
+                        GrabObject(swordRight);
+                        swordRight.transform.position = anchorRight.transform.position;
+                        sPRight = StatePower.Equiped;
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (sPRight == StatePower.Equiped)
+            {
+                DropObject(swordRight, false);
+                sPRight = StatePower.Throw;
+            }
+        }
+
+        if (OVRInput.Get(OVRInput.Axis1D.PrimaryHandTrigger) > 0)
+        {
+            if (swordLeft != null)
+            {
+                if (sPLeft == StatePower.Attract)
+                {
+                    if (distanceLeft < 0.35f)
+                    {
+                        swordLeft.transform.SetParent(anchorLeft.transform);
+                        GrabObject(swordLeft);
+                        swordLeft.transform.position = anchorLeft.transform.position;
+                        sPLeft = StatePower.Equiped;
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (sPLeft == StatePower.Equiped)
+            {
+                DropObject(swordLeft, true);
+                sPLeft = StatePower.Throw;
+            }
+        }
+
+        //when right hand throw an object, made to be sure every state is reinitialised as it should
+        if (sPRight == StatePower.Throw)
+        {
+            if (OVRInput.Get(OVRInput.Axis1D.SecondaryHandTrigger) == 0)
+            {
+                if (OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger) == 0)
+                {
+                    sPRight = StatePower.Sleep;
+                }
+            }
+        }
+        //when left hand throw an object, made to be sure every state is reinitialised as it should
+        if (sPLeft == StatePower.Throw)
+        {
+            if (OVRInput.Get(OVRInput.Axis1D.PrimaryHandTrigger) == 0)
+            {
+                if (OVRInput.Get(OVRInput.Axis1D.PrimaryIndexTrigger) == 0)
+                {
+                    sPRight = StatePower.Sleep;
+                }
+            }
         }
 
     }
@@ -249,13 +353,46 @@ public class RayGrab : MonoBehaviour {
         }
     }
 
-    void GrabObject()
+    void GrabObject(GameObject grabbed)
     {
+        SwordScript sSGrabbed = grabbed.GetComponent<SwordScript>();
+        sSGrabbed.isGrabbed = true;
+        grabbed.transform.eulerAngles = new Vector3(-240f, 0f, 0f);
 
     }
 
-    void DropObject(GameObject dropped)
+    void DropObject(GameObject dropped, bool isRight)
     {
+
+        if (dropped.transform.parent != null)
+        {
+            dropped.transform.parent = null;
+        }
+        SwordScript sSDropped = dropped.GetComponent<SwordScript>();
+        sSDropped.isGrabbed = false;
+        Rigidbody rbDropped = dropped.GetComponent<Rigidbody>();
+        rbDropped.constraints = RigidbodyConstraints.None;
+
+        if (isRight)
+        {
+            rbDropped.velocity = anchorCenter.transform.rotation * OVRInput.GetLocalControllerVelocity(controllerRight);
+            rbDropped.angularVelocity = OVRInput.GetLocalControllerAngularVelocity(controllerRight);
+            /*rBSwordRight = null;
+            swordRight = null;
+            sSRight = null;*/
+        }
+        else
+        {
+            rbDropped.velocity = anchorCenter.transform.rotation * OVRInput.GetLocalControllerVelocity(controllerLeft) * forceMultiplier;
+            rbDropped.angularVelocity = OVRInput.GetLocalControllerAngularVelocity(controllerLeft) * forceMultiplier;
+            /*rBSwordLeft = null;
+            swordLeft = null;
+            sSLeft = null;*/
+        }
+        // 
+        
+
+
 
     }
 }

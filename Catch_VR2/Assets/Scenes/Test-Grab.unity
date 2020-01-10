@@ -179,6 +179,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.7
       objectReference: {fileID: 0}
+    - target: {fileID: 4462048200782954, guid: f552c5a6cb52c3941b11d243262738de, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.0000005
+      objectReference: {fileID: 0}
     - target: {fileID: 1945562867890130, guid: f552c5a6cb52c3941b11d243262738de, type: 3}
       propertyPath: m_Layer
       value: 9
@@ -232,6 +236,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92966dd9cdfc20d48bf85421ca420683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controllerLeft: 1
+  controllerRight: 2
   anchorRight: {fileID: 0}
   anchorLeft: {fileID: 0}
   anchorCenter: {fileID: 0}
@@ -333,28 +339,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87d3154b31a29744d8f4ac29cefc3ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 30
+  maxSpeed: 100
   isForced: 0
   isGrabbed: 0
   target: {fileID: 1192111157}
-  forces: 0.25
---- !u!114 &202363576
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 202363571}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02d61468f8b77ae4b92c344bc9a600fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_allowOffhandGrab: 1
-  m_snapPosition: 0
-  m_snapOrientation: 0
-  m_snapOffset: {fileID: 0}
-  m_grabPoints: []
+  force: 2
 --- !u!1 &534669902
 GameObject:
   m_ObjectHideFlags: 0
@@ -1200,11 +1189,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87d3154b31a29744d8f4ac29cefc3ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 30
+  maxSpeed: 100
   isForced: 0
   isGrabbed: 0
   target: {fileID: 1192111157}
-  forces: 0.5
+  force: 2
 --- !u!1 &2060240835
 GameObject:
   m_ObjectHideFlags: 0

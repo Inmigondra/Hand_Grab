@@ -15,7 +15,7 @@ public class SwordScript : MonoBehaviour
 
 
     public Transform target;
-    public float forces;
+    public float force;
 
     private void Awake()
     {
@@ -41,17 +41,33 @@ public class SwordScript : MonoBehaviour
     void FixedUpdate()
     {
 
-        if (isForced)
+        if (isForced == true && isGrabbed == false)
         {
             Vector3 targetDelta = target.position - transform.position;
             float angleDiff = Vector3.Angle(transform.forward, targetDelta);
 
             Vector3 cross = Vector3.Cross(transform.forward, targetDelta);
 
-            rb.AddTorque(cross * angleDiff * forces);
+            rb.AddTorque(cross * angleDiff * force);
 
         }
 
+        if(isGrabbed)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+            rb.useGravity = false;
+        }
+        
+        if (isForced == false)
+        {
+            if (isGrabbed == false)
+            {
+                rb.useGravity = true;
+                rb.constraints = RigidbodyConstraints.None;
+            }
+        }
 
         if (rb.velocity.magnitude > maxSpeed)
         {
