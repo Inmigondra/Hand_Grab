@@ -3,19 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum StatePower
-{
-    Sleep,
-    Attract,
-    Equiped,
-    Throw
-}
-public enum StrenghtVibrate
-{
-    Weak,
-    Medium,
-    Strong
-}
+
 public class RayGrab : MonoBehaviour {
 
 
