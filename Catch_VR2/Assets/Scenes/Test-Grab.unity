@@ -224,34 +224,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1910431283}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &65071190
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 65071189}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92966dd9cdfc20d48bf85421ca420683, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controllerLeft: 1
-  controllerRight: 2
-  anchorRight: {fileID: 0}
-  anchorLeft: {fileID: 0}
-  anchorCenter: {fileID: 0}
-  distance: 100
-  sphereRadius: 1
-  sPRight: 0
-  sPLeft: 0
-  swordLeft: {fileID: 0}
-  swordRight: {fileID: 0}
-  rBSwordRight: {fileID: 0}
-  rBSwordLeft: {fileID: 0}
-  forceMultiplier: 2
-  sSRight: {fileID: 0}
-  sSLeft: {fileID: 0}
 --- !u!114 &65071191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,7 +242,7 @@ MonoBehaviour:
   anchorLeft: {fileID: 0}
   anchorCenter: {fileID: 0}
   distance: 100
-  sphereRadius: 2
+  sphereRadius: 1
   sPRight: 0
   sPLeft: 0
   swordLeft: {fileID: 0}
@@ -281,7 +253,9 @@ MonoBehaviour:
   sSRight: {fileID: 0}
   sSLeft: {fileID: 0}
   sVR: 0
-  vibrate: 0
+  sVL: 0
+  vibrateRight: 0
+  vibrateLeft: 0
 --- !u!1 &170076733
 GameObject:
   m_ObjectHideFlags: 0
