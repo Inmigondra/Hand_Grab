@@ -56,7 +56,11 @@ public class RayGrabTruePower : MonoBehaviour
 
 
     public StrenghtVibrate sVR;
-    public bool vibrate = false;
+    public StrenghtVibrate sVL;
+    public bool vibrateRight = false;
+    public bool vibrateLeft = false;
+
+
     private void Awake()
     {
         if (anchorCenter == null)
@@ -106,14 +110,14 @@ public class RayGrabTruePower : MonoBehaviour
             case StatePower.Sleep:
                 if (Physics.SphereCast(anchorRight.transform.position, sphereRadius, anchorRight.transform.forward, out hitRight, distance))
                 {
-                   if (hitRight.collider.tag == "Sword")
+                    if (hitRight.collider.tag == "Sword")
                     {
-                        if(vibrate == false)
+                        if (vibrateRight == false)
                         {
                             StartCoroutine("VibrationRight");
                         }
                     }
-
+                   
                 }
 
                 //send raycast while index trigger is pressed
@@ -127,13 +131,9 @@ public class RayGrabTruePower : MonoBehaviour
                             GameObject registerdCol;
                             registerdCol = hitRight.collider.gameObject;
                             CheckParent(registerdCol, true);
-                            sPRight = StatePower.Attract;
                             sVR = StrenghtVibrate.Medium;
-                            if (vibrate == false)
-                            {
-                                StartCoroutine("VibrationRight");
-                            }
-
+                            StartCoroutine("VibrationRight");
+                            sPRight = StatePower.Attract;                            
                         }
                     }
                 }
@@ -169,19 +169,16 @@ public class RayGrabTruePower : MonoBehaviour
                             swordRight.transform.SetParent(anchorRight.transform);
                             GrabObject(swordRight);
                             swordRight.transform.position = anchorRight.transform.position;
-                            sPRight = StatePower.Equiped;
                             sVR = StrenghtVibrate.Strong;
-                            if (vibrate == false)
-                            {
-                                StartCoroutine("VibrationRight");
-                            }
+                            StartCoroutine("VibrationRight");
+                            sPRight = StatePower.Equiped;
                         }
                     }
                 }
                 //when a sword is attracted and the index trigger is up, we go to sleep
                 else
                 {
-                    vibrate = false;
+                    sVR = StrenghtVibrate.Weak;
                     sPRight = StatePower.Sleep;
                 }
                 break;
@@ -190,19 +187,113 @@ public class RayGrabTruePower : MonoBehaviour
                 {
                     DropObject(swordRight, true);
                     sPRight = StatePower.Throw;
-                    vibrate = false;
                 }
                 if (OVRInput.Get(OVRInput.Axis1D.SecondaryHandTrigger) == 0)
                 {
                     DropObject(swordRight, true);
                     sPRight = StatePower.Throw;
-                    vibrate = false;
                 }
                 break;
             case StatePower.Throw:
                 if (OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger) == 0 && OVRInput.Get(OVRInput.Axis1D.SecondaryHandTrigger) == 0)
                 {
+                    sVR = StrenghtVibrate.Weak;
                     sPRight = StatePower.Sleep;
+                }
+                break;
+        }
+
+        //Switch state of left trigger 
+        switch (sPLeft)
+        {
+            case StatePower.Sleep:
+                if (Physics.SphereCast(anchorLeft.transform.position, sphereRadius, anchorLeft.transform.forward, out hitLeft, distance))
+                {
+                    if (hitLeft.collider.tag == "Sword")
+                    {
+                        if (vibrateLeft == false)
+                        {
+                            StartCoroutine("VibrationLeft");
+                        }
+                    }
+                }
+
+                if (OVRInput.Get(OVRInput.Axis1D.PrimaryIndexTrigger) > 0)
+                {
+                    if (Physics.SphereCast(anchorLeft.transform.position, sphereRadius, anchorLeft.transform.forward, out hitLeft, distance))
+                    {
+                        currentHitDistanceLeft = hitLeft.distance;
+                        if (hitLeft.collider.tag == "Sword")
+                        {
+                            GameObject registeredCol;
+                            registeredCol = hitLeft.collider.gameObject;
+                            CheckParent(registeredCol, false);
+                            sVL = StrenghtVibrate.Medium;
+                            StartCoroutine("VibrationLeft");
+                            sPLeft = StatePower.Attract;
+                        }
+                    }
+                }
+                else
+                {
+                    if (sSLeft != null)
+                    {
+                        sSLeft.isForced = false;
+                        sSLeft = null;
+                    }
+                    if (swordLeft != null)
+                    {
+                        rBSwordLeft.useGravity = true;
+                        rBSwordLeft = null;
+                        swordLeft = null;
+                    }
+                }
+                break;
+            case StatePower.Attract:
+                //while the trigger is pressed, continue attraction
+                if (OVRInput.Get(OVRInput.Axis1D.PrimaryIndexTrigger) > 0)
+                {
+                    rBSwordLeft.useGravity = false;
+                    sSLeft.isForced = true;
+                    Vector3 directionLeft = (swordLeft.transform.position - anchorLeft.transform.position) * -1f;
+                    rBSwordLeft.AddForce(directionLeft * forceMultiplier);
+                    //When the other trigger is pulled
+                    if (OVRInput.Get(OVRInput.Axis1D.PrimaryHandTrigger) > 0)
+                    {
+                        if (distanceLeft < 0.35f)
+                        {
+                            swordLeft.transform.SetParent(anchorLeft.transform);
+                            GrabObject(swordLeft);
+                            swordLeft.transform.position = anchorLeft.transform.position;
+                            sVL = StrenghtVibrate.Strong;
+                            StartCoroutine("VibrationLeft");
+                            sPLeft = StatePower.Equiped;
+                        }
+                    }
+                }
+                else
+                {
+                    sVL = StrenghtVibrate.Weak;
+                    sPLeft = StatePower.Sleep;
+                }
+                break;
+            case StatePower.Equiped:
+                if (OVRInput.Get(OVRInput.Axis1D.PrimaryIndexTrigger) == 0)
+                {
+                    DropObject(swordLeft, false);
+                    sPLeft = StatePower.Throw;
+                }
+                if (OVRInput.Get(OVRInput.Axis1D.PrimaryHandTrigger) == 0)
+                {
+                    DropObject(swordLeft, false);
+                    sPLeft = StatePower.Throw;
+                }
+                break;
+            case StatePower.Throw:
+                if (OVRInput.Get(OVRInput.Axis1D.PrimaryIndexTrigger) == 0 && OVRInput.Get(OVRInput.Axis1D.PrimaryHandTrigger) == 0)
+                {
+                    sVL = StrenghtVibrate.Weak;
+                    sPLeft = StatePower.Sleep;
                 }
                 break;
         }
@@ -216,6 +307,7 @@ public class RayGrabTruePower : MonoBehaviour
                 swordRight = hitObject;
                 rBSwordRight = swordRight.GetComponent<Rigidbody>();
                 sSRight = swordRight.GetComponent<SwordScript>();
+                sSRight.target = anchorRight.transform;
 
             }
             else
@@ -223,6 +315,7 @@ public class RayGrabTruePower : MonoBehaviour
                 swordLeft = hitObject;
                 rBSwordLeft = swordLeft.GetComponent<Rigidbody>();
                 sSLeft = swordLeft.GetComponent<SwordScript>();
+                sSLeft.target = anchorLeft.transform;
             }
         }
         else
@@ -284,8 +377,19 @@ public class RayGrabTruePower : MonoBehaviour
         }
         else
         {
-            rbDropped.velocity = anchorCenter.transform.rotation * OVRInput.GetLocalControllerVelocity(controllerLeft) * forceMultiplier;
-            rbDropped.angularVelocity = OVRInput.GetLocalControllerAngularVelocity(controllerLeft) * forceMultiplier;
+            if (sSLeft != null)
+            {
+                sSLeft.isForced = false;
+                sSLeft = null;
+            }
+            if (swordLeft != null)
+            {
+                rBSwordLeft.useGravity = true;
+                rBSwordLeft = null;
+                swordLeft = null;
+            }
+            rbDropped.velocity =  OVRInput.GetLocalControllerVelocity(controllerLeft) * 2;
+            rbDropped.angularVelocity = OVRInput.GetLocalControllerAngularVelocity(controllerLeft) * 2;
             /*rBSwordLeft = null;
             swordLeft = null;
             sSLeft = null;*/
@@ -299,32 +403,48 @@ public class RayGrabTruePower : MonoBehaviour
 
     public IEnumerator VibrationRight()
     {
-        vibrate = true;
+        vibrateRight = true;
         switch (sVR)
         {            
             case (StrenghtVibrate.Weak):
-                Debug.Log("0");
-                for (float i = 0; i <= 0.5f; i += Time.deltaTime)
-                {
-                    Debug.Log("01");
+                    OVRInput.SetControllerVibration(0.1f, 0.1f, OVRInput.Controller.RTouch);
 
-                    OVRInput.SetControllerVibration(0.15f, 0.15f, OVRInput.Controller.RTouch);
-                }
                 break;
             case (StrenghtVibrate.Medium):
-                for (float i = 0; i <= 0.5f; i += Time.deltaTime)
-                {
-                    OVRInput.SetControllerVibration(0.5f, 0.5f, OVRInput.Controller.RTouch);
-                }
+                    OVRInput.SetControllerVibration(0.25f, 0.25f, OVRInput.Controller.RTouch);
+
                 break;
             case (StrenghtVibrate.Strong):
-                for (float i = 0; i <= 0.5f; i += Time.deltaTime)
-                {
                     OVRInput.SetControllerVibration(1, 1, OVRInput.Controller.RTouch);
-                }
+
                 break;
         }
+        yield return new WaitForSeconds(0.25f);
         OVRInput.SetControllerVibration(0, 0, OVRInput.Controller.RTouch);
+        yield return new WaitForSeconds(0.5f);
+        vibrateRight = false;
+        yield return null;
+    }
+
+    public IEnumerator VibrationLeft()
+    {
+        vibrateLeft = true;
+        switch (sVL)
+        {
+            case (StrenghtVibrate.Weak):
+                OVRInput.SetControllerVibration(0.1f, 0.1f, OVRInput.Controller.LTouch);
+                break;
+            case (StrenghtVibrate.Medium):
+                OVRInput.SetControllerVibration(0.25f, 0.25f, OVRInput.Controller.LTouch);
+                break;
+            case (StrenghtVibrate.Strong):
+                OVRInput.SetControllerVibration(1, 1, OVRInput.Controller.LTouch);
+                break;
+        }
+        yield return new WaitForSeconds(0.25f);
+        OVRInput.SetControllerVibration(0, 0, OVRInput.Controller.LTouch);
+        yield return new WaitForSeconds(0.5f);
+        vibrateLeft = false;
         yield return null;
     }
 }
