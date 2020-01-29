@@ -108,7 +108,7 @@ public class RayGrabTruePower : MonoBehaviour
         switch (sPRight)
         {
             case StatePower.Sleep:
-                if (Physics.SphereCast(anchorRight.transform.position, sphereRadius, anchorRight.transform.forward, out hitRight, distance))
+                if (Physics.SphereCast(anchorRight.transform.position, sphereRadius, anchorRight.transform.forward, out hitRight, distance, 1 << LayerMask.NameToLayer("Sword") ))
                 {
                     if (hitRight.collider.tag == "Sword")
                     {
@@ -123,7 +123,7 @@ public class RayGrabTruePower : MonoBehaviour
                 //send raycast while index trigger is pressed
                 if (OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger) > 0)
                 {
-                    if (Physics.SphereCast(anchorRight.transform.position, sphereRadius, anchorRight.transform.forward, out hitRight, distance))
+                    if (Physics.SphereCast(anchorRight.transform.position, sphereRadius, anchorRight.transform.forward, out hitRight, distance, 1 << LayerMask.NameToLayer("Sword")))
                     {
                         currentHitDistanceRight = hitRight.distance;
                         if (hitRight.collider.tag == "Sword")
@@ -167,8 +167,9 @@ public class RayGrabTruePower : MonoBehaviour
                         if (distanceRight < 0.35f)
                         {
                             swordRight.transform.SetParent(anchorRight.transform);
-                            GrabObject(swordRight);
                             swordRight.transform.position = anchorRight.transform.position;
+
+                            GrabObject(swordRight);
                             sVR = StrenghtVibrate.Strong;
                             StartCoroutine("VibrationRight");
                             sPRight = StatePower.Equiped;
@@ -207,7 +208,7 @@ public class RayGrabTruePower : MonoBehaviour
         switch (sPLeft)
         {
             case StatePower.Sleep:
-                if (Physics.SphereCast(anchorLeft.transform.position, sphereRadius, anchorLeft.transform.forward, out hitLeft, distance))
+                if (Physics.SphereCast(anchorLeft.transform.position, sphereRadius, anchorLeft.transform.forward, out hitLeft, distance, 1 << LayerMask.NameToLayer("Sword")))
                 {
                     if (hitLeft.collider.tag == "Sword")
                     {
@@ -220,7 +221,7 @@ public class RayGrabTruePower : MonoBehaviour
 
                 if (OVRInput.Get(OVRInput.Axis1D.PrimaryIndexTrigger) > 0)
                 {
-                    if (Physics.SphereCast(anchorLeft.transform.position, sphereRadius, anchorLeft.transform.forward, out hitLeft, distance))
+                    if (Physics.SphereCast(anchorLeft.transform.position, sphereRadius, anchorLeft.transform.forward, out hitLeft, distance, 1 << LayerMask.NameToLayer("Sword")))
                     {
                         currentHitDistanceLeft = hitLeft.distance;
                         if (hitLeft.collider.tag == "Sword")
@@ -263,8 +264,8 @@ public class RayGrabTruePower : MonoBehaviour
                         if (distanceLeft < 0.35f)
                         {
                             swordLeft.transform.SetParent(anchorLeft.transform);
-                            GrabObject(swordLeft);
                             swordLeft.transform.position = anchorLeft.transform.position;
+                            GrabObject(swordLeft);
                             sVL = StrenghtVibrate.Strong;
                             StartCoroutine("VibrationLeft");
                             sPLeft = StatePower.Equiped;
